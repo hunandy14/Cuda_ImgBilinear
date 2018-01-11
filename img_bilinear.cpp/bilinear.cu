@@ -144,16 +144,17 @@ __host__ void biliner_texture_core(float *dst, const float* src,
 #endif // AutoMem_Style
 
 // 紋理線性取值函式 vector 轉介介面
-__host__ void biliner_texture(vector<float>& dst, const vector<float>& src,
+__host__ double biliner_texture(vector<float>& dst, const vector<float>& src,
 	size_t width, size_t height, float ratio)
 {
-	Timer T; T.priSta = 0;
+	Timer T; T.priSta = 1;
 	T.start();
 	dst.resize(width*ratio * height*ratio);
 	T.print(" CPU new 儲存空間");
 	T.start();
 	biliner_texture_core(dst.data(), src.data(), width, height, ratio);
 	T.print(" GPU 全部");
+	return T;
 }
 
 
@@ -220,7 +221,7 @@ __host__ void biliner_share_core(float *dst, const float* src,
 }
 
 // 共享記憶體線性取值函式 vector 轉介介面
-__host__ void biliner_share(vector<float>& dst, const vector<float>& src,
+__host__ double biliner_share(vector<float>& dst, const vector<float>& src,
 	size_t width, size_t height, float ratio)
 {
 	Timer T; T.priSta = 1;
@@ -230,9 +231,13 @@ __host__ void biliner_share(vector<float>& dst, const vector<float>& src,
 	T.start();
 	biliner_share_core(dst.data(), src.data(), width, height, ratio);
 	T.print(" GPU 全部");
+	return T;
 }
+
+
+
 //======================================================================================
-static void first(vector<float>& img, const vector<float>& img_ori, 
+__host__ void biliner_CPU_core(vector<float>& img, const vector<float>& img_ori, 
 	size_t width, size_t height, float Ratio)
 {
 	int newH = static_cast<int>(floor(height * Ratio));
@@ -255,6 +260,18 @@ static void first(vector<float>& img, const vector<float>& img_ori,
 		}
 	}
 }
-
+__host__ double biliner_CPU(vector<float>& dst, const vector<float>& src,
+	size_t width, size_t height, float ratio)
+{
+	Timer T; T.priSta = 1;
+	T.start();
+	dst.resize(width*ratio * height*ratio);
+	T.print(" CPU new 儲存空間");
+	T.start();
+	biliner_CPU_core(dst, src, width, height, ratio);
+	T.print(" CPU 全部");
+	return T;
+}
+//======================================================================================
 
 

@@ -10,10 +10,11 @@ Final: 2018/01/08
 
 using std::vector;
 
-__host__ void biliner_texture(vector<float>& dst, const vector<float>& src, 
+__host__ double biliner_texture(vector<float>& dst, const vector<float>& src, 
 	size_t width, size_t height, float ratio);
 
+__host__ double biliner_share(vector<float>& dst, const vector<float>& src,
+	size_t width, size_t height, float ratio);
 
-
-__host__ void biliner_share(vector<float>& dst, const vector<float>& src,
+__host__ double biliner_CPU(vector<float>& dst, const vector<float>& src,
 	size_t width, size_t height, float ratio);

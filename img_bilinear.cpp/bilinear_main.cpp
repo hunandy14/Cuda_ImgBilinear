@@ -8,6 +8,7 @@ Final: 2018/01/08
 #include "device_launch_parameters.h"
 #include <iostream>
 #include <vector>
+#include <string>
 using namespace std;
 
 #include "bilinear.cuh"
@@ -38,11 +39,16 @@ int main(){
 	// ³B²z
 	float ratio = 5;
 	vector<float> img_gpuRst, img_data = tofloat(img1.data, img1.size);
-	//biliner_texture(img_gpuRst, img_data, img1.width, img1.height, ratio);
-	biliner_share(img_gpuRst, img_data, img1.width, img1.height, ratio);
+
+	double time;
+	//time = biliner_texture(img_gpuRst, img_data, img1.width, img1.height, ratio);
+	//time = biliner_share(img_gpuRst, img_data, img1.width, img1.height, ratio);
+	time = biliner_CPU(img_gpuRst, img_data, img1.width, img1.height, ratio);
+
 
 	// ¿é¥X
 	vector<unsigned char> img_out =  touch(img_gpuRst.data(), img_gpuRst.size());
-	bmpWrite("img//GpuOut.bmp", img_out.data(), img1.width*ratio, img1.height*ratio, 8);
+	string name = "img//Out-texture_"+to_string(time)+".bmp";
+	bmpWrite(name.c_str(), img_out.data(), img1.width*ratio, img1.height*ratio, 8);
     return 0;
 }
