@@ -20,8 +20,9 @@ public:
 	CudaData(size_t size){
 		malloc(size);
 	}
-	CudaData(T* dataIn ,size_t size): len(size){
-		memcpyInAuto(dataIn, size);
+	CudaData(const T* dataIn ,size_t size): len(size){
+		malloc(size);
+		memcpyIn(dataIn, size);
 	}
 	~CudaData(){
 		if(gpuData!=nullptr) {
@@ -36,13 +37,9 @@ public:
 		len = size;
 		cudaMalloc((void**)&gpuData, size*sizeof(T));
 	}
-	void memcpyIn(T* dataIn ,size_t size) {
+	void memcpyIn(const T* dataIn ,size_t size) {
 		if(size > len) {throw out_of_range("memcpyIn input size > curr size.");}
 		cudaMemcpy(gpuData, dataIn, size*sizeof(T), cudaMemcpyHostToDevice);
-	}
-	void memcpyInAuto(T* dataIn ,size_t size) {
-		malloc(size);
-		memcpyIn(dataIn, size);
 	}
 	void memcpyOut(T* dst ,size_t size) {
 		cudaMemcpy(dst, gpuData, size*sizeof(T), cudaMemcpyDeviceToHost);
@@ -61,8 +58,8 @@ public:
 		return gpuData;
 	}
 private:
-	T* gpuData;
-	size_t len=0;
+	T* gpuData = nullptr;
+	size_t len = 0;
 };
 // CudaArr 記憶體自動管理程序
 template <class T>
