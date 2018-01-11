@@ -40,7 +40,7 @@ __host__ void biliner_texture_core(float *dst, const float* src,
 	int srcSize = dstW*dstH;
 	int dstSize = srcSize*ratio*ratio;
 
-	// 宣告 texture2D陣列並複製資料進去
+	// 宣告 texture2D陣列並綁定
 	T.start();
 	CudaMemArr<float> cuArray(src, dstW, dstH);
 	cudaBindTextureToArray(rT, cuArray);
@@ -60,16 +60,13 @@ __host__ void biliner_texture_core(float *dst, const float* src,
 	dim3 block(BLOCK_DIM, BLOCK_DIM);
 	dim3 grid(ceil((float)dstW*ratio / BLOCK_DIM), ceil((float)dstH*ratio / BLOCK_DIM));
 	T.start();
-	biliner_kernel << < grid, block >> > (gpu_dst, dstW, dstH, ratio);
+	biliner_kernel <<< grid, block >> > (gpu_dst, dstW, dstH, ratio);
 	T.print("  核心計算");
 
 	// 取出GPU值
 	T.start();
 	gpu_dst.memcpyOut(dst, dstSize);
 	T.print("  GPU 取出資料");
-
-	// 釋放GPU記憶體
-	cudaUnbindTexture(rT);
 }
 
 #else
@@ -81,7 +78,7 @@ __host__ void biliner_texture_core(float *dst, const float* src,
 	int srcSize = dstW*dstH;
 	int dstSize = srcSize*ratio*ratio;
 
-	// 宣告 texture2D陣列並複製資料進去
+	// 宣告 texture2D陣列並綁定
 	T.start();
 	cudaChannelFormatDesc chDesc = cudaCreateChannelDesc<float>();
 	cudaArray* cuArray = nullptr;

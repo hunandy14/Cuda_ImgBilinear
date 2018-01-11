@@ -103,9 +103,10 @@ public:
 	operator cudaArray*() {
 		return cuArray;
 	}
+public:
+	const cudaChannelFormatDesc chDesc = cudaCreateChannelDesc<T>();
 private:
 	size_t width = 0;
 	size_t height = 0;
-	cudaChannelFormatDesc chDesc = cudaCreateChannelDesc<T>();
 	cudaArray* cuArray = nullptr;
 };
