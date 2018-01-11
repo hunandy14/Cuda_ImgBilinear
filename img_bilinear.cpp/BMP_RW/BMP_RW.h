@@ -33,6 +33,12 @@ struct ImgData {
 		bmpRead(name.c_str(), &data, &width, &height, &bits);
 		this->size = width*height * bits/8.f;
 	}
+	~ImgData() {
+		if(data) {
+			free(data);
+			width=height=bits=size=0;
+		}
+	}
 	void gray() {
 		if(bits==8) {return;}
 		uch* temp = new uch[size/3];
