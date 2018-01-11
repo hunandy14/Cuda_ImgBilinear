@@ -12,6 +12,7 @@ using namespace std;
 
 #include "bilinear.cuh"
 #include "BMP_RW\BMP_RW.h"
+#include "CudaMem\CudaMem.cuh"
 
 vector<float> tofloat(const uch* img, size_t size) {
 	vector<float> temp(size);
@@ -27,6 +28,7 @@ vector<uch> touch(const float* img, size_t size) {
 }
 
 int main(){
+	size_t a;
 	// Åª¨ú
 	ImgData img1("img//kanna.bmp");
 	img1.gray();

@@ -47,6 +47,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalUsingDirectories>C:\Users\hunan\Documents\Visual Studio 2015\Projects\img_bilinear.cpp\img_bilinear.cpp\CudaMem</AdditionalUsingDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -91,6 +92,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   <ItemGroup>
     <ClInclude Include="bilinear.cuh" />
     <ClInclude Include="BMP_RW\BMP_RW.h" />
+    <ClInclude Include="CudaMem\CudaMem.cuh" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BMP_RW\BMP_RW.c" />
