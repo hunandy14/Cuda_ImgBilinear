@@ -30,11 +30,23 @@ vector<uch> touch(const float* img, size_t size) {
 	} return temp;
 }
 
+static const int M = 4;
+static const int N = 3;
+__global__ void addMat(int **A,int **B,int **C)
+{
+	int i = blockIdx.x * blockDim.x + threadIdx.x;
+	int j = blockIdx.y * blockDim.y + threadIdx.y;
+	if(i < M && j < N)
+		C[i][j] = A[i][j] + B[i][j];
+}
+
 int main(){
-	size_t a;
+	Timer T;
 	// 讀取
 	ImgData img1("img//kanna.bmp");
+	T.start();
 	img1.gray();
+	T.print("轉灰階圖");
 
 	// 處理
 	float ratio = 5;
@@ -42,13 +54,15 @@ int main(){
 
 	double time;
 	//time = biliner_texture(img_gpuRst, img_data, img1.width, img1.height, ratio);
-	//time = biliner_share(img_gpuRst, img_data, img1.width, img1.height, ratio);
-	time = biliner_CPU(img_gpuRst, img_data, img1.width, img1.height, ratio);
+	time = biliner_share(img_gpuRst, img_data, img1.width, img1.height, ratio);
+	//time = biliner_CPU(img_gpuRst, img_data, img1.width, img1.height, ratio);
 
 
 	// 輸出
 	vector<unsigned char> img_out =  touch(img_gpuRst.data(), img_gpuRst.size());
-	string name = "img//Out-texture_"+to_string(time)+".bmp";
+	//string name = "img//Out-texture_"+to_string(time)+".bmp";
+	string name = "GpuOut.bmp";
 	bmpWrite(name.c_str(), img_out.data(), img1.width*ratio, img1.height*ratio, 8);
-    return 0;
+
+	return 0;
 }

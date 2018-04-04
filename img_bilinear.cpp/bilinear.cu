@@ -274,4 +274,3 @@ __host__ double biliner_CPU(vector<float>& dst, const vector<float>& src,
 }
 //======================================================================================
 
-
